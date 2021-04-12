@@ -1,0 +1,9 @@
+<oddjob id="oddjob">
+    <job>
+        <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
+            <dependencies>
+                <resolve:dependency coords="commons-beanutils:commons-beanutils:1.9.4"/>
+            </dependencies>
+        </resolve:resolve>
+    </job>
+</oddjob>

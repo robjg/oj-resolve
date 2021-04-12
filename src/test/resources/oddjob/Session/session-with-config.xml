@@ -1,0 +1,25 @@
+<oddjob id="oddjob">
+    <job>
+        <bean class="org.oddjob.resolve.types.ResolverSessionTypeTest$SessionCapture" id="sessionCapture">
+            <resolverSession>
+                <resolve:session xmlns:resolve="oddjob:resolve">
+                    <localRepository>
+                        <file file="${oddjob.dir}/myrepo"/>
+                    </localRepository>
+                    <mirrors>
+                        <is id="planetmirror.com"
+                            url="http://downloads.planetmirror.com/pub/maven2"
+                            mirrorOf="foo" />
+                    </mirrors>
+                    <proxies>
+                        <is protocol="http" host="proxy.somewhere.com" port="8080">
+                            <authentication>
+                                <is username="proxyuser" password="somepassword"/>
+                            </authentication>
+                        </is>
+                    </proxies>
+                </resolve:session>
+            </resolverSession>
+        </bean>
+    </job>
+</oddjob>

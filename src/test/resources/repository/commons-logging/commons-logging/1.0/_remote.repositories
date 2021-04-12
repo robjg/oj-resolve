@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jun 22 11:21:36 BST 2020
+commons-logging-1.0.pom>central=
+commons-logging-1.0.jar>sonatype-oss=

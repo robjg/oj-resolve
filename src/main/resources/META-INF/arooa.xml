@@ -1,0 +1,19 @@
+<arooa:descriptor  xmlns:arooa="http://rgordon.co.uk/oddjob/arooa"
+    prefix="resolve" namespace="oddjob:resolve">
+	<components>
+		<arooa:bean-def element='resolve'
+						className='org.oddjob.resolve.ResolveJob'>
+		</arooa:bean-def>
+	</components>
+	<values>
+		<arooa:bean-def element='dependency'
+						className='org.oddjob.resolve.types.Dependency'>
+		</arooa:bean-def>
+		<arooa:bean-def element='dependencies'
+						className='org.oddjob.resolve.types.Dependencies'>
+		</arooa:bean-def>
+		<arooa:bean-def element='session'
+						className='org.oddjob.resolve.types.ResolverSessionType'>
+		</arooa:bean-def>
+	</values>
+</arooa:descriptor>

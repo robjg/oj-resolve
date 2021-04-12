@@ -1,0 +1,20 @@
+<oddjob id="oddjob">
+    <job>
+        <bean class="org.oddjob.resolve.types.ResolverSessionTypeTest$SessionCapture" id="sessionCapture">
+            <resolverSession>
+                <resolve:session xmlns:resolve="oddjob:resolve">
+                    <userProperties>
+                        <properties>
+                            <values>
+                                <value key="some.dir" value="${oddjob.dir}"/>
+                            </values>
+                        </properties>
+                    </userProperties>
+                    <userSettings>
+                        <file file="${oddjob.dir}/settings.xml"/>
+                    </userSettings>
+                </resolve:session>
+            </resolverSession>
+        </bean>
+    </job>
+</oddjob>
