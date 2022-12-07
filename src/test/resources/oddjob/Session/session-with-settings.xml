@@ -1,6 +1,6 @@
 <oddjob id="oddjob">
     <job>
-        <bean class="org.oddjob.resolve.types.ResolverSessionTypeTest$SessionCapture" id="sessionCapture">
+        <bean class="org.oddjob.maven.types.ResolverSessionTypeTest$SessionCapture" id="sessionCapture">
             <resolverSession>
                 <resolve:session xmlns:resolve="oddjob:resolve">
                     <userProperties>

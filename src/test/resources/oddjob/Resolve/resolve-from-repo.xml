@@ -20,7 +20,7 @@
                         <is url="http://localhost:${server.port}"/>
                     </remoteRepositories>
                     <dependencies>
-                        <resolve:dependency coords="commons-beanutils:commons-beanutils:1.9.4"/>
+                        <resolve:dependency coords="test.oj.resolve:a:1.2.3"/>
                     </dependencies>
                 </resolve:resolve>
                 <stop job="${server}"/>

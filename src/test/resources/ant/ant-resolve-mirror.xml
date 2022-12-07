@@ -1,0 +1,15 @@
+<project xmlns:repo="antlib:org.apache.maven.resolver.ant">
+
+    <taskdef uri="antlib:org.apache.maven.resolver.ant" resource="org/apache/maven/resolver/ant/antlib.xml"/>
+
+    <target name="test-resolve">
+        <repo:settings file="mirror-settings.xml" />
+        <repo:resolve>
+            <dependencies>
+                <dependency groupid="test.oj.resolve" artifactid="a" version="1.2.3" />
+            </dependencies>
+            <path refid="cp" classpath="compile"/>
+        </repo:resolve>
+    </target>
+
+</project>

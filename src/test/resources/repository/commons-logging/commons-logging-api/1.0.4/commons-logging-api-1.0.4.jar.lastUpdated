@@ -1,5 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Mon Jun 22 11:24:24 BST 2020
-https\://repo.maven.apache.org/maven2/.lastUpdated=1592821464112
-https\://repository.ops4j.org/maven2/.error=Could not transfer artifact commons-logging\:commons-logging-api\:jar\:1.0.4 from/to ops4j.releases (https\://repository.ops4j.org/maven2)\: Connect to repository.ops4j.org\:443 [repository.ops4j.org/5.9.73.199] failed\: Connection refused\: connect
-@default-ops4j.releases-https\://repository.ops4j.org/maven2/.lastUpdated=1592821462762

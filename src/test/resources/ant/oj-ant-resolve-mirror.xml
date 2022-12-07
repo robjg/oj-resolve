@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="oddjob">
+    <job>
+        <sequential>
+            <jobs>
+                <web:server id="server" xmlns:web="oddjob:web">
+                    <handler>
+                        <web:resource base="repository" directoriesListed="true" resourceType="CLASSPATH"/>
+                    </handler>
+                </web:server>
+                <properties>
+                    <values>
+                        <file file="${oddjob.dir}/../../../../target/resolve" key="work.dir"/>
+                        <file file="${work.dir}/repo" key="local.repo"/>
+                        <value value="${server.port}" key="server.port"/>
+                    </values>
+                </properties>
+                <ant baseDir="${oddjob.dir}" >
+                    <tasks>
+                        <xml>
+                            <tasks>
+                                <ant antfile="${oddjob.dir}/ant-resolve-mirror.xml" target="test-resolve"/>
+                            </tasks>
+                        </xml>
+                    </tasks>
+                    <output>
+                        <tee>
+                            <outputs>
+                                <stdout/>
+                                <identify id="results">
+                                    <value>
+                                        <buffer/>
+                                    </value>
+                                </identify>
+                            </outputs>
+                        </tee>
+                    </output>
+                </ant>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>
