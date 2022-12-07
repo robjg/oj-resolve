@@ -10,6 +10,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.aether.*;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
 import org.eclipse.aether.impl.DefaultServiceLocator;
+import org.eclipse.aether.impl.RemoteRepositoryManager;
 import org.eclipse.aether.repository.AuthenticationSelector;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.MirrorSelector;
@@ -140,7 +141,11 @@ public class ResolverSessionBuilder {
 
         session.setLocalRepositoryManager(getLocalRepoMan(session, repoSys, localRepo));
 
-        return new Impl(settings, session, repoSys);
+        RemoteRepositoryManager remoteRepoMan = Objects.requireNonNull(
+                locator.getService( RemoteRepositoryManager.class ),
+                "The repository system could not be initialized" );
+
+        return new Impl(settings, session, repoSys, remoteRepoMan);
     }
 
     static void processServerConfiguration(Settings settings, Map<Object, Object> configProps) {
@@ -288,10 +293,16 @@ public class ResolverSessionBuilder {
 
         private final RepositorySystem repoSys;
 
-        Impl(Settings settings, RepositorySystemSession session, RepositorySystem repoSys) {
+        private final RemoteRepositoryManager remoteRepoMan;
+
+        Impl(Settings settings,
+             RepositorySystemSession session,
+             RepositorySystem repoSys,
+             RemoteRepositoryManager remoteRepoMan) {
             this.settings = settings;
             this.session = session;
             this.repoSys = repoSys;
+            this.remoteRepoMan = remoteRepoMan;
         }
 
         @Override
@@ -310,9 +321,14 @@ public class ResolverSessionBuilder {
         }
 
         @Override
+        public RemoteRepositoryManager getRemoteRepoMan() {
+            return remoteRepoMan;
+        }
+
+        @Override
         public String toString() {
             return "ResolverSession{" +
-                    "settings=" + settings +
+                    "settings=" + SettingsBuilder.settingsToString(settings) +
                     ", session=" + session +
                     ", repoSys=" + repoSys +
                     '}';

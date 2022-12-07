@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<oddjob id="oddjob">
+    <job>
+        <sequential>
+            <jobs>
+                <web:server id="server" xmlns:web="oddjob:web">
+                    <handler>
+                        <bean class="org.eclipse.jetty.security.ConstraintSecurityHandler">
+                            <loginService>
+                                <bean class="org.eclipse.jetty.security.HashLoginService" config="${oddjob.dir}/realm.txt" hotReload="false" name="FooRealm"/>
+                            </loginService>
+                            <constraintMappings>
+                                <list>
+                                    <values>
+                                        <bean class="org.eclipse.jetty.security.ConstraintMapping" pathSpec="/*">
+                                            <constraint>
+                                                <bean authenticate="true" class="org.eclipse.jetty.util.security.Constraint" name="auth">
+                                                    <roles>
+                                                        <value value="**"/>
+                                                    </roles>
+                                                </bean>
+                                            </constraint>
+                                        </bean>
+                                    </values>
+                                </list>
+                            </constraintMappings>
+                            <authenticator>
+                                <bean class="org.eclipse.jetty.security.authentication.BasicAuthenticator"/>
+                            </authenticator>
+                            <handler>
+                                <web:resource base="repository" directoriesListed="true" resourceType="CLASSPATH"/>
+                            </handler>
+                        </bean>
+                    </handler>
+                </web:server>
+                <properties>
+                    <values>
+                        <file file="${oddjob.dir}/../../../../target/resolve" key="work.dir"/>
+                        <file file="${work.dir}/repo" key="local.repo"/>
+                        <value value="${server.port}" key="server.port"/>
+                    </values>
+                </properties>
+                <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
+                    <resolverSession>
+                        <resolve:session>
+                            <userSettings>
+                                <file file="${oddjob.dir}/mirror-settings.xml"/>
+                            </userSettings>
+                        </resolve:session>
+                    </resolverSession>
+                    <dependencies>
+                        <resolve:dependency coords="test.oj.resolve:a:1.2.3"/>
+                    </dependencies>
+                </resolve:resolve>
+                <stop job="${server}"/>
+            </jobs>
+        </sequential>
+    </job>
+</oddjob>

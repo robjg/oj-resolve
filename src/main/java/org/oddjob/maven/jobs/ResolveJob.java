@@ -69,21 +69,12 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
                     }
                 });
 
-        DependencyCollectorBuilder dependencyCollectorBuilder =
-                DependencyCollectorBuilder.from(resolverSession);
-
-        Optional.ofNullable(this.remoteRepositories)
-                .ifPresent(repositories -> repositories.forEach(dependencyCollectorBuilder::withRepo));
-
-        if (!noSettingsRepos) {
-            dependencyCollectorBuilder.withSettingsRepos();
-        }
-        if (!noDefaultRepos) {
-            dependencyCollectorBuilder.withDefaultRepos();
-        }
-
-        DependencyCollector dependencyCollector = dependencyCollectorBuilder
-                .build();
+        DependencyCollector dependencyCollector =
+                DependencyCollectorBuilder.from(resolverSession)
+                        .withNoDefaultRepos(noDefaultRepos)
+                        .withNoSettingsRepos(noSettingsRepos)
+                        .withRepos(this.remoteRepositories)
+                        .build();
 
         CollectResult result = dependencyCollector.collectDependencies(dependencies);
 

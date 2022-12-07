@@ -1,6 +1,5 @@
 package org.oddjob.maven.collect;
 
-import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.building.SettingsBuildingException;
 import org.eclipse.aether.collection.CollectResult;
 import org.eclipse.aether.graph.DependencyNode;
@@ -12,7 +11,6 @@ import org.oddjob.maven.props.ArooaRepoProperties;
 import org.oddjob.maven.props.RepoSessionProperties;
 import org.oddjob.maven.session.ResolverSession;
 import org.oddjob.maven.session.ResolverSessionBuilder;
-import org.oddjob.maven.settings.SettingsBuilder;
 import org.oddjob.maven.types.Dependency;
 
 import java.util.List;
@@ -31,15 +29,10 @@ public class DependencyCollectorTest {
         RepoSessionProperties sessionProperties = ArooaRepoProperties.from(
                 arooaSession.getPropertyManager());
 
-        Settings settings = SettingsBuilder.from(sessionProperties)
-                .build();
-
         ResolverSession resolverSession = ResolverSessionBuilder.from(sessionProperties)
-                .withSettings(settings)
                 .build();
 
         DependencyCollector dependencyCollector = DependencyCollectorBuilder.from(resolverSession)
-                .withDefaultRepos()
                 .build();
 
         Dependency dependency = new Dependency();
@@ -83,7 +76,11 @@ public class DependencyCollectorTest {
 
         List<RemoteRepository> repoList = dependencyCollector.getRemoteRepositories();
 
-        assertThat(repoList.size(), is(0));
+        assertThat(repoList.size(), is(1));
+
+        RemoteRepository defaultRepo = repoList.get(0);
+
+        assertThat(defaultRepo.getId(), is("central"));
     }
 
     @Test
@@ -98,7 +95,7 @@ public class DependencyCollectorTest {
                 .build();
 
         DependencyCollector dependencyCollector = DependencyCollectorBuilder.from(resolverSession)
-                .withDefaultRepos()
+                .withNoSettingsRepos(true)
                 .build();
 
         List<org.eclipse.aether.repository.RemoteRepository> repoList =

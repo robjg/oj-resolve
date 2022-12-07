@@ -42,7 +42,7 @@ public class DependencyResolverTest {
                 .build();
 
         DependencyCollector dependencyCollector = DependencyCollectorBuilder.from(resolverSession)
-                .withDefaultRepos()
+                .withNoSettingsRepos(true)
                 .build();
 
         Dependency dependency = new Dependency();

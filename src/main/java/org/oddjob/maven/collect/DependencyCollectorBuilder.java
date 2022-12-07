@@ -23,11 +23,19 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * Provide a means of collecting dependencies. Abstracted out of
+ * {code org.apache.maven.resolver.internal.ant.AntRepoSys#collectDependencies}
+ */
 public class DependencyCollectorBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(DependencyCollector.class);
 
     private final ResolverSession resolverSession;
+
+    private boolean noDefaultRepos;
+
+    private boolean noSettingsRepos;
 
     private final List<RemoteRepository> repos = new ArrayList<>();
 
@@ -39,17 +47,28 @@ public class DependencyCollectorBuilder {
         return new DependencyCollectorBuilder(resolverSession);
     }
 
-    public DependencyCollectorBuilder withDefaultRepos() {
+    public DependencyCollectorBuilder withNoDefaultRepos(boolean noDefaultRepos) {
+        this.noDefaultRepos = noDefaultRepos;
+        return this;
+    }
+
+    public DependencyCollectorBuilder withNoSettingsRepos(boolean noSettingsRepos) {
+        this.noSettingsRepos = noSettingsRepos;
+        return this;
+    }
+
+    protected List<RemoteRepository> getDefaultRepos() {
 
         org.oddjob.maven.types.RemoteRepository repo = new org.oddjob.maven.types.RemoteRepository();
         repo.setId( "central" );
         repo.setUrl( "https://repo1.maven.org/maven2/" );
 
-        repos.add(ConverterUtils.toRepository(repo));
-        return this;
+        return Arrays.asList(ConverterUtils.toRepository(repo));
     }
 
-    public DependencyCollectorBuilder withSettingsRepos() {
+    protected List<RemoteRepository> getSettingsRepos() {
+
+        List<RemoteRepository> repos = new ArrayList<>();
 
         Settings settings = resolverSession.getSettings();
         List<String> activeProfiles = settings.getActiveProfiles();
@@ -96,7 +115,7 @@ public class DependencyCollectorBuilder {
                 repos.add( ConverterUtils.toRepository(repo) );
             }
         }
-        return this;
+        return repos;
     }
 
     public DependencyCollectorBuilder withRepo(org.oddjob.maven.types.RemoteRepository repo) {
@@ -105,9 +124,29 @@ public class DependencyCollectorBuilder {
         return this;
     }
 
+    public DependencyCollectorBuilder withRepos(Collection<? extends org.oddjob.maven.types.RemoteRepository> repos) {
+
+        repos.forEach(this::withRepo);
+        return this;
+    }
 
     public DependencyCollector build() {
-        return new Impl(this);
+
+        List<RemoteRepository> repos = new ArrayList<>();
+        if (!noDefaultRepos) {
+            repos.addAll(getDefaultRepos());
+        }
+        if (!noSettingsRepos) {
+            repos.addAll(getSettingsRepos());
+        }
+        repos.addAll(this.repos);
+
+        return new Impl(resolverSession,
+                resolverSession.getRemoteRepoMan().aggregateRepositories(
+                        resolverSession.getSession(),
+                        Collections.emptyList(),
+                        repos,
+                        true));
     }
 
     static class Impl implements DependencyCollector {
@@ -116,9 +155,9 @@ public class DependencyCollectorBuilder {
 
         private final List<RemoteRepository> repos;
 
-        Impl(DependencyCollectorBuilder builder) {
-            this.resolverSession = builder.resolverSession;
-            this.repos = new ArrayList<>(builder.repos);
+        Impl(ResolverSession resolverSession, List<RemoteRepository> repos) {
+            this.resolverSession = resolverSession;
+            this.repos = repos;
         }
 
         @Override
@@ -218,6 +257,14 @@ public class DependencyCollectorBuilder {
                 throw new IllegalArgumentException("Cannot read " + file, e);
             }
             return dependencies;
+        }
+
+        @Override
+        public String toString() {
+            return "DependencyCollector: {" +
+                    "resolverSession=" + resolverSession +
+                    ", repos=" + repos +
+                    '}';
         }
     }
 }
