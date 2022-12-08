@@ -126,7 +126,9 @@ public class DependencyCollectorBuilder {
 
     public DependencyCollectorBuilder withRepos(Collection<? extends org.oddjob.maven.types.RemoteRepository> repos) {
 
-        repos.forEach(this::withRepo);
+        if (repos != null) {
+            repos.forEach(this::withRepo);
+        }
         return this;
     }
 

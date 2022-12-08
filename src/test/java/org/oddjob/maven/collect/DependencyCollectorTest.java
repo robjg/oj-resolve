@@ -21,6 +21,10 @@ import static org.hamcrest.Matchers.nullValue;
 
 public class DependencyCollectorTest {
 
+    /**
+     * This uses all defaults so will fail behind a corporate fire wall unless
+     * settings have been set up to use a mirror.
+     */
     @Test
     public void resolveWithDefaults() throws SettingsBuildingException {
 

@@ -3,6 +3,26 @@
 	<components>
 		<arooa:bean-def element='resolve'
 						className='org.oddjob.maven.jobs.ResolveJob'>
+			<design>
+				<design:form xmlns:design="arooa:design">
+					<formItems>
+						<design:group bordered="true" title="General">
+							<formItems>
+								<design:text property="name" title="Name"/>
+								<design:single property="dependencies" title="Dependencies"/>
+							</formItems>
+						</design:group>
+						<design:group bordered="true" title="Optional">
+							<formItems>
+								<design:single property="resolverSession" title="Resolver Session"/>
+								<design:text property="noSettingsRepos" title="No Settings Repos"/>
+								<design:text property="noDefaultRepos" title="No Default Repos"/>
+								<design:indexed property="remoteRepositories" title="Remote Repos"/>
+							</formItems>
+						</design:group>
+					</formItems>
+				</design:form>
+			</design>
 		</arooa:bean-def>
 	</components>
 	<values>
