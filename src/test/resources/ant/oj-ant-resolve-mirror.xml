@@ -15,7 +15,7 @@
                         <value value="${server.port}" key="server.port"/>
                     </values>
                 </properties>
-                <ant baseDir="${oddjob.dir}" >
+                <ant baseDir="${oddjob.dir}" messageLevel="VERBOSE">
                     <tasks>
                         <xml>
                             <tasks>
