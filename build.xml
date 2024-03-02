@@ -1,0 +1,87 @@
+<project basedir="." name="Net Oddball">
+
+	<!-- =================================================================== -->
+	<!-- Initialization target                                               -->
+	<!-- =================================================================== -->
+	<target name="init">
+
+		<tstamp/>
+
+
+		<!-- =================================================================== -->
+		<!-- Properties                                                          -->
+		<!-- =================================================================== -->
+
+		<property file="../oj-assembly/version.properties"/>
+			
+		<property name="Name"     value="Resolve Oddball"/>
+		<property name="name"     value="oj-resolve"/>
+		<property name="build.version"  value="${project.version}"/>
+
+		<echo message="--------------------------------------------------------------"/>
+		<echo message="            ${Name} ${build.version}                                "/>
+		<echo message="--------------------------------------------------------------"/>
+		<echo message="Building with ${ant.version}                                  "/>
+		<echo message="using build file ${ant.file}                                  "/>
+		<echo message="--------------------------------------------------------------"/>
+
+		<property name="src.dir"      		value="./src"/>
+
+		<property name="target.dir"       	value="./target"/>
+
+		<property name="oddball.dir"		value="${target.dir}/oddball"/>
+
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares the source distribution                                    -->
+	<!-- =================================================================== -->
+	<target name="dist-src" depends="init"
+            description="Prepares the source distribution"
+			if="dist.src.dir">
+
+		<property name="to.dir" value="${dist.src.dir}/${name}"/>
+		
+		<copy todir="${to.dir}/src" filtering="off">
+			<fileset dir="${src.dir}"/>
+		</copy>
+
+		<copy todir="${to.dir}">
+			<fileset dir=".">
+				<include name="build.xml"/>
+                <include name="oj-assemble.xml"/>
+				<include name="LICENSE.txt"/>
+				<include name="NOTICE.txt"/>
+				<include name="README.md"/>
+				<include name="pom.xml"/>
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Prepares the binary distribution                                    -->
+	<!-- =================================================================== -->
+	<target name="dist-bin" depends="init"
+			description="Prepares the binary distribution"
+			if="dist.bin.dir">
+		
+		<property name="to.dir" value="${dist.bin.dir}/oddballs/${name}"/>
+
+		<copy todir="${to.dir}">
+			<fileset dir="${oddball.dir}"/>
+		</copy>
+
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Clean targets                                                       -->
+	<!-- =================================================================== -->
+	
+	<target name="clean" depends="init" description="Cleans the build directories">
+		<delete dir="${target.dir}"/>
+	</target>
+
+</project>
+
+<!-- End of file -->

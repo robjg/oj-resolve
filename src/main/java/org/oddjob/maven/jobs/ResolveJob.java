@@ -42,49 +42,49 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
     /**
      * @oddjob.property
      * @oddjob.description The name of this job.
-     * @oddjb.required No.
+     * @oddjob.required No.
      */
     private volatile String name;
 
     /**
      * @oddjob.property
      * @oddjob.description The Session to use. See {@link org.oddjob.maven.types.ResolverSessionType}.
-     * @oddjb.required No, All defaults will be used.
+     * @oddjob.required No, All defaults will be used.
      */
     private volatile ResolverSession resolverSession;
 
     /**
      * @oddjob.property
      * @oddjob.description Optional repositories to use.
-     * @oddjb.required No, Defaults will be used.
+     * @oddjob.required No, Defaults will be used.
      */
     private final List<RemoteRepository> remoteRepositories = new ArrayList<>();
 
     /**
      * @oddjob.property
      * @oddjob.description The dependencies to resolve. See {@link org.oddjob.maven.types.DependencyContainer}.
-     * @oddjb.required Yes.
+     * @oddjob.required Yes.
      */
     private volatile DependencyContainer dependencies;
 
     /**
      * @oddjob.property
      * @oddjob.description A List of resolved files.
-     * @oddjb.required R/O.
+     * @oddjob.required R/O.
      */
     private volatile List<File> resolvedFiles;
 
     /**
      * @oddjob.property
      * @oddjob.description Use repos from the settings (true/false).
-     * @oddjb.required No. Settings repos will be used.
+     * @oddjob.required No. Settings repos will be used.
      */
     private volatile boolean noSettingsRepos;
 
     /**
      * @oddjob.property
      * @oddjob.description Use default repos (true/false).
-     * @oddjb.required No. The default repos will be used.
+     * @oddjob.required No. The default repos will be used.
      */
     private volatile boolean noDefaultRepos;
 
@@ -153,7 +153,7 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
     }
 
     public RemoteRepository getRemoteRepositories(int index) {
-        return remoteRepositories.get(0);
+        return remoteRepositories.get(index);
     }
 
     public void setRemoteRepositories(int index, RemoteRepository remoteRepository) {
@@ -176,11 +176,13 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
      * @oddjob.property
      * @oddjob.description An array of resolved files. A convenience to make this
      * easier to use with an {@link org.oddjob.util.URLClassLoaderType}.
-     * @oddjb.required R/O.
+     * @oddjob.required R/O.
      */
     @SuppressWarnings("JavadocReference")
     public File[] getResolvedFilesArray() {
-        return resolvedFiles.toArray(new File[0]);
+        return Optional.ofNullable(resolvedFiles)
+                .map(rf -> rf.toArray(new File[0]))
+                .orElse(null);
     }
 
     public boolean isNoSettingsRepos() {
