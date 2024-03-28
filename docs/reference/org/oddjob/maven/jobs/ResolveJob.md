@@ -43,7 +43,7 @@ Resolves dependencies to a list of files downloaded to the local repo.
       <tr><td><i>Required</i></td><td>Yes.</td></tr>
 </table>
 
-The dependencies to resolve. See [org.oddjob.maven.types.DependencyContainer](http://rgordon.co.uk/oddjob/1.6.0/api/org/oddjob/maven/types/DependencyContainer.html).
+The dependencies to resolve. See `org.oddjob.maven.types.DependencyContainer`.
 
 #### name <a name="propertyname"></a>
 
@@ -102,7 +102,7 @@ A List of resolved files.
 </table>
 
 An array of resolved files. A convenience to make this
-easier to use with an <code>org.oddjob.util.URLClassLoaderType </code>.
+easier to use with an ` org.oddjob.util.URLClassLoaderType`.
 
 #### resolverSession <a name="propertyresolverSession"></a>
 
