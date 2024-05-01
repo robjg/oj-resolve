@@ -40,6 +40,7 @@
                         <value value="${server.port}" key="server.port"/>
                     </values>
                 </properties>
+                <!-- #snippet1 { -->
                 <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
                         <resolve:session>
@@ -52,6 +53,7 @@
                         <resolve:dependency coords="test.oj.resolve:a:1.2.3"/>
                     </dependencies>
                 </resolve:resolve>
+                <!-- } #snippet1 -->
                 <stop job="${server}"/>
             </jobs>
         </sequential>

@@ -1,0 +1,14 @@
+<oddjob id="oddjob">
+    <job>
+        <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
+            <dependencies>
+                <resolve:dependencies>
+                    <dependencies>
+                        <resolve:dependency coords="commons-logging:commons-logging:1.2"/>
+                        <resolve:dependency coords="commons-collections:commons-collections:3.2.2"/>
+                    </dependencies>
+                </resolve:dependencies>
+            </dependencies>
+        </resolve:resolve>
+    </job>
+</oddjob>

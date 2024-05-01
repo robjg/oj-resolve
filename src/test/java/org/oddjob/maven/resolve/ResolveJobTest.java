@@ -8,9 +8,9 @@ package org.oddjob.maven.resolve;
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -34,13 +34,13 @@ import org.oddjob.state.ParentState;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
-public class ResolveJobTest
-{
+public class ResolveJobTest {
     @Test
     public void testResolveWithDefaults() throws ArooaConversionException {
 
@@ -58,7 +58,7 @@ public class ResolveJobTest
 
         resolve.run();
 
-        List<File> files = resolve.getResolvedFiles();;
+        List<File> files = resolve.getResolvedFiles();
 
         File repoDir = resolve.getResolverSession()
                 .getSession().getLocalRepository().getBasedir();
@@ -77,9 +77,9 @@ public class ResolveJobTest
     public void testResolveWithDefaultsInOddjob() throws ArooaConversionException {
 
         Oddjob oddjob = new Oddjob();
-        oddjob.setFile(new File(getClass()
-                .getResource("/oddjob/Resolve/resolve-with-defaults.xml")
-        .getFile()));
+        oddjob.setFile(new File(Objects.requireNonNull(getClass()
+                        .getResource("/oddjob/Resolve/resolve-with-defaults.xml"))
+                .getFile()));
 
         oddjob.run();
 
@@ -90,6 +90,7 @@ public class ResolveJobTest
         ResolverSession resolverSession = lookup.lookup("resolve.resolverSession",
                 ResolverSession.class);
 
+        @SuppressWarnings("unchecked")
         List<File> files = lookup.lookup("resolve.resolvedFiles",
                 List.class);
 
@@ -105,4 +106,34 @@ public class ResolveJobTest
         assertThat(files, contains(file1, file2, file3));
     }
 
+    @Test
+    public void testResolveManyWithDefaultsInOddjob() throws ArooaConversionException {
+
+        Oddjob oddjob = new Oddjob();
+        oddjob.setFile(new File(Objects.requireNonNull(getClass()
+                        .getResource("/oddjob/Resolve/resolve-many-with-defaults.xml"))
+                .getFile()));
+
+        oddjob.run();
+
+        assertThat(oddjob.lastStateEvent().getState(), is(ParentState.COMPLETE));
+
+        OddjobLookup lookup = new OddjobLookup(oddjob);
+
+        ResolverSession resolverSession = lookup.lookup("resolve.resolverSession",
+                ResolverSession.class);
+
+        @SuppressWarnings("unchecked")
+        List<File> files = lookup.lookup("resolve.resolvedFiles",
+                List.class);
+
+        File repoDir = resolverSession.getSession().getLocalRepository().getBasedir();
+
+        File file2 = new File(repoDir,
+                "commons-logging/commons-logging/1.2/commons-logging-1.2.jar");
+        File file3 = new File(repoDir,
+                "commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar");
+
+        assertThat(files, contains(file2, file3));
+    }
 }

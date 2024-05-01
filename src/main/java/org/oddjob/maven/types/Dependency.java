@@ -30,26 +30,62 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * @oddjob.description Specify a dependency either as a full coordinate or using individual
+ * group/artifact/version etc. See {@link org.oddjob.maven.jobs.ResolveJob} and {@link DependenciesFactory}
+ * for examples.
+ *
  */
 public class Dependency
     implements DependencyContainer
 {
     private static final Logger logger = LoggerFactory.getLogger(Dependency.class);
 
+    /**
+     * @oddjob.description The group id of the artifact.
+     * @oddjob.required. Yes unless specified in 'coords' property.
+     */
     private String groupId;
 
+    /**
+     * @oddjob.description The artifact name.
+     * @oddjob.required. Yes unless specified in 'coords' property.
+     */
     private String artifactId;
 
+    /**
+     * @oddjob.description The version of the artifact.
+     * @oddjob.required. Yes unless specified in 'coords' property.
+     */
     private String version;
 
+    /**
+     * @oddjob.description The classifier of the artifact.
+     * @oddjob.required. No.
+     */
     private String classifier;
 
+    /**
+     * @oddjob.description The type of the artifact.
+     * @oddjob.required. No.
+     */
     private String type;
 
+    /**
+     * @oddjob.description The scope of the artifact.
+     * @oddjob.required. No.
+     */
     private String scope;
 
+    /**
+     * @oddjob.description Specify an absolute path of the artifact.
+     * @oddjob.required. No.
+     */
     private File systemPath;
 
+    /**
+     * @oddjob.description Exclusion from transitive dependencies.
+     * @oddjob.required. No.
+     */
     private final List<Exclusion> exclusions = new ArrayList<Exclusion>();
 
 
@@ -176,6 +212,14 @@ public class Dependency
         this.scope = scope;
     }
 
+    /**
+     * @oddjob.property
+     * @oddjob.description The full Coordinates of the artifact. The format is the same as Maven
+     * of {@code <groupId>:<artifactId>:<version>[[:<type>[:<classifier>]]:<scope>].}
+     * @oddjob.required Yes unless specified by individual attributes.
+     *
+     * @param coords The coordinates as a String.
+     */
     public void setCoords( String coords )
     {
         if ( groupId != null || artifactId != null || version != null || type != null || classifier != null
@@ -230,7 +274,7 @@ public class Dependency
         }
         key.append( ':' );
         key.append( ( type != null ) ? type : "jar" );
-        if ( classifier != null && classifier.length() > 0 )
+        if ( classifier != null && !classifier.isEmpty())
         {
             key.append( ':' );
             key.append( classifier );

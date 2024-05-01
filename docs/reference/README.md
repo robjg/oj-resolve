@@ -6,9 +6,9 @@
 
 ### Types
 
-- [resolve:dependencies](org/oddjob/maven/types/Dependencies.md) - 
-- [resolve:dependency](org/oddjob/maven/types/Dependency.md) - 
-- [resolve:session](org/oddjob/maven/types/ResolverSessionType.md) - 
+- [resolve:dependencies](org/oddjob/maven/types/DependenciesFactory.md) - Provide a list of dependencies.
+- [resolve:dependency](org/oddjob/maven/types/Dependency.md) - Specify a dependency either as a full coordinate or using individual group/artifact/version etc.
+- [resolve:session](org/oddjob/maven/types/ResolverSessionType.md) - Provide a Session for resolving artifact from Maven.
 
 -----------------------
 

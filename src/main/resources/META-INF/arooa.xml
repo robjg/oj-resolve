@@ -30,7 +30,7 @@
 						className='org.oddjob.maven.types.Dependency'>
 		</arooa:bean-def>
 		<arooa:bean-def element='dependencies'
-						className='org.oddjob.maven.types.Dependencies'>
+						className='org.oddjob.maven.types.DependenciesFactory'>
 		</arooa:bean-def>
 		<arooa:bean-def element='session'
 						className='org.oddjob.maven.types.ResolverSessionType'>
