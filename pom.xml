@@ -38,8 +38,9 @@
     </scm>
 
     <properties>
-        <mavenVersion>3.8.3</mavenVersion>
-        <resolverVersion>1.7.2</resolverVersion>
+        <mavenVersion>3.9.9</mavenVersion>
+        <resolverVersion>1.9.22</resolverVersion>
+        <antVersion>1.10.15</antVersion>
     </properties>
 
     <dependencyManagement>
@@ -47,17 +48,17 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.1</version>
             </dependency>
             <dependency>
-                <groupId>org.sonatype.plexus</groupId>
+                <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-cipher</artifactId>
                 <version>2.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-parent</artifactId>
-                <version>34</version>
+                <version>42</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -92,6 +93,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-named-locks</artifactId>
+            <version>${resolverVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-transport-classpath</artifactId>
             <version>${resolverVersion}</version>
         </dependency>
@@ -106,45 +112,34 @@
             <version>${resolverVersion}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-supplier</artifactId>
+            <version>${resolverVersion}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-resolver-provider</artifactId>
             <version>${mavenVersion}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-component-annotations</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.sisu</groupId>
-                    <artifactId>org.eclipse.sisu.plexus</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-settings-builder</artifactId>
             <version>${mavenVersion}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-component-annotations</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <!-- This is needed to make the Maven resolver work with Maven 3.8.1+ -->
+        <!-- [resolver:resolve] [ERROR] Failed to determine Java version for profile XX -->
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-component-annotations</artifactId>
-            <scope>provided</scope>
+            <artifactId>plexus-cipher</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-interpolation</artifactId>
-            <version>1.26</version>
+            <version>1.27</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.sisu</groupId>
             <artifactId>org.eclipse.sisu.plexus</artifactId>
-            <version>0.3.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -239,7 +234,7 @@
         <dependency>
             <groupId>org.apache.maven.resolver</groupId>
             <artifactId>maven-resolver-ant-tasks</artifactId>
-            <version>1.4.0</version>
+            <version>1.5.2</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

@@ -8,22 +8,13 @@ import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.building.SettingsBuildingException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.aether.*;
-import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
-import org.eclipse.aether.impl.DefaultServiceLocator;
-import org.eclipse.aether.impl.RemoteRepositoryManager;
 import org.eclipse.aether.repository.AuthenticationSelector;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.MirrorSelector;
 import org.eclipse.aether.repository.ProxySelector;
-import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
-import org.eclipse.aether.spi.connector.transport.TransporterFactory;
-import org.eclipse.aether.spi.log.Logger;
-import org.eclipse.aether.transport.classpath.ClasspathTransporterFactory;
-import org.eclipse.aether.transport.file.FileTransporterFactory;
-import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.supplier.RepositorySystemSupplier;
 import org.eclipse.aether.util.repository.*;
 import org.oddjob.maven.props.RepoSessionProperties;
-import org.oddjob.maven.resolve.AntServiceLocatorErrorHandler;
 import org.oddjob.maven.resolve.LoggingTransferListener;
 import org.oddjob.maven.settings.SettingsBuilder;
 import org.oddjob.maven.types.Authentication;
@@ -103,14 +94,16 @@ public class ResolverSessionBuilder {
                     }
                 });
 
-        DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
-        locator.setErrorHandler(new AntServiceLocatorErrorHandler());
-        locator.setServices(Logger.class, new LoggerDelegate());
-        locator.setServices(ModelBuilder.class, MODEL_BUILDER);
-        locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
-        locator.addService(TransporterFactory.class, FileTransporterFactory.class);
-        locator.addService(TransporterFactory.class, HttpTransporterFactory.class);
-        locator.addService(TransporterFactory.class, ClasspathTransporterFactory.class);
+
+        RepositorySystem repoSys = new RepositorySystemSupplier().get();
+
+        RepositorySystemSession session = getSession(settings, repoSys);
+
+        return new Impl(settings, session, repoSys);
+    }
+
+    // Copied from AntRepoSys#getSession
+    protected RepositorySystemSession getSession(Settings settings, RepositorySystem repoSys) {
 
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
@@ -118,10 +111,11 @@ public class ResolverSessionBuilder {
         configProps.put(ConfigurationProperties.USER_AGENT, getUserAgent(sessionProperties));
         configProps.putAll(sessionProperties.getAllProperties());
         processServerConfiguration(settings, configProps);
-        session.setConfigProperties(configProps);
 
-        session.setOffline(isOffline(settings));
+        session.setConfigProperties(configProps);
+        session.setSystemProperties(sessionProperties.getSystemProperties());
         session.setUserProperties(sessionProperties.getUserProperties());
+        session.setOffline(isOffline(settings));
 
         session.setProxySelector(getProxySelector(settings));
         session.setMirrorSelector(getMirrorSelector(settings));
@@ -135,17 +129,9 @@ public class ResolverSessionBuilder {
         File localRepo = Optional.ofNullable(this.localRepo)
                 .orElseGet(() -> getDefaultLocalRepoDir(sessionProperties, settings));
 
-        RepositorySystem repoSys = Optional.ofNullable(locator.getService(RepositorySystem.class))
-                .orElseThrow(() -> new IllegalStateException("Failed to find an " +
-                        RepositorySystem.class.getName() + " in " + locator));
-
         session.setLocalRepositoryManager(getLocalRepoMan(session, repoSys, localRepo));
 
-        RemoteRepositoryManager remoteRepoMan = Objects.requireNonNull(
-                locator.getService( RemoteRepositoryManager.class ),
-                "The repository system could not be initialized" );
-
-        return new Impl(settings, session, repoSys, remoteRepoMan);
+        return session;
     }
 
     static void processServerConfiguration(Settings settings, Map<Object, Object> configProps) {
@@ -220,16 +206,27 @@ public class ResolverSessionBuilder {
         return selector;
     }
 
+    // Copied from AntRepoSys#getMirrorSelector.
     private MirrorSelector getMirrorSelector(Settings settings) {
         DefaultMirrorSelector selector = new DefaultMirrorSelector();
 
         for (Mirror mirror : mirrors) {
-            selector.add(mirror.getId(), mirror.getUrl(), mirror.getType(), false, mirror.getMirrorOf(), null);
+            selector.add(mirror.getId(),
+                    mirror.getUrl(),
+                    mirror.getType(),
+                    false,
+                    false,
+                    mirror.getMirrorOf(), null);
         }
 
         for (org.apache.maven.settings.Mirror mirror : settings.getMirrors()) {
-            selector.add(String.valueOf(mirror.getId()), mirror.getUrl(), mirror.getLayout(), false,
-                    mirror.getMirrorOf(), mirror.getMirrorOfLayouts());
+            selector.add(String.valueOf(mirror.getId()),
+                    mirror.getUrl(),
+                    mirror.getLayout(),
+                    false,
+                    false,
+                    mirror.getMirrorOf(),
+                    mirror.getMirrorOfLayouts());
         }
 
         return selector;
@@ -293,16 +290,12 @@ public class ResolverSessionBuilder {
 
         private final RepositorySystem repoSys;
 
-        private final RemoteRepositoryManager remoteRepoMan;
-
         Impl(Settings settings,
              RepositorySystemSession session,
-             RepositorySystem repoSys,
-             RemoteRepositoryManager remoteRepoMan) {
+             RepositorySystem repoSys) {
             this.settings = settings;
             this.session = session;
             this.repoSys = repoSys;
-            this.remoteRepoMan = remoteRepoMan;
         }
 
         @Override
@@ -318,11 +311,6 @@ public class ResolverSessionBuilder {
         @Override
         public RepositorySystem getSystem() {
             return repoSys;
-        }
-
-        @Override
-        public RemoteRepositoryManager getRemoteRepoMan() {
-            return remoteRepoMan;
         }
 
         @Override

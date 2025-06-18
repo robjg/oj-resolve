@@ -25,11 +25,11 @@ import java.util.*;
 
 /**
  * Provide a means of collecting dependencies. Abstracted out of
- * {code org.apache.maven.resolver.internal.ant.AntRepoSys#collectDependencies}
+ * {@code org.apache.maven.resolver.internal.ant.AntRepoSys#collectDependencies}
  */
 public class DependencyCollectorBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(DependencyCollector.class);
+    private static final Logger logger = LoggerFactory.getLogger(DependencyCollectorBuilder.class);
 
     private final ResolverSession resolverSession;
 
@@ -63,7 +63,7 @@ public class DependencyCollectorBuilder {
         repo.setId( "central" );
         repo.setUrl( "https://repo1.maven.org/maven2/" );
 
-        return Arrays.asList(ConverterUtils.toRepository(repo));
+        return Collections.singletonList(ConverterUtils.toRepository(repo));
     }
 
     protected List<RemoteRepository> getSettingsRepos() {
@@ -83,33 +83,11 @@ public class DependencyCollectorBuilder {
                 repo.setUrl( repository.getUrl() );
                 if ( repository.getReleases() != null )
                 {
-                    RepositoryPolicy repositoryPolicy = repository.getReleases();
-                    org.oddjob.maven.types.RemoteRepository.Policy policy = new org.oddjob.maven.types.RemoteRepository.Policy();
-                    policy.setEnabled( repositoryPolicy.isEnabled() );
-                    if ( repositoryPolicy.getChecksumPolicy() != null )
-                    {
-                        policy.setChecksums( repositoryPolicy.getChecksumPolicy() );
-                    }
-                    if ( repositoryPolicy.getUpdatePolicy() != null )
-                    {
-                        policy.setUpdates( repositoryPolicy.getUpdatePolicy() );
-                    }
-                    repo.setReleases( policy );
+                    repo.setReleases( getRemoteRepositoryPolicy(repository.getReleases()) );
                 }
                 if ( repository.getSnapshots() != null )
                 {
-                    RepositoryPolicy repositoryPolicy = repository.getSnapshots();
-                    org.oddjob.maven.types.RemoteRepository.Policy policy = new org.oddjob.maven.types.RemoteRepository.Policy();
-                    policy.setEnabled( repositoryPolicy.isEnabled() );
-                    if ( repositoryPolicy.getChecksumPolicy() != null )
-                    {
-                        policy.setChecksums( repositoryPolicy.getChecksumPolicy() );
-                    }
-                    if ( repositoryPolicy.getUpdatePolicy() != null )
-                    {
-                        policy.setUpdates( repositoryPolicy.getUpdatePolicy() );
-                    }
-                    repo.setSnapshots( policy );
+                    repo.setSnapshots( getRemoteRepositoryPolicy(repository.getSnapshots()) );
                 }
 
                 repos.add( ConverterUtils.toRepository(repo) );
@@ -118,6 +96,23 @@ public class DependencyCollectorBuilder {
         return repos;
     }
 
+    private static org.oddjob.maven.types.RemoteRepository.Policy getRemoteRepositoryPolicy(RepositoryPolicy repositoryPolicy) {
+    
+        org.oddjob.maven.types.RemoteRepository.Policy policy = new org.oddjob.maven.types.RemoteRepository.Policy();
+    
+        policy.setEnabled( repositoryPolicy.isEnabled() );
+        if ( repositoryPolicy.getChecksumPolicy() != null )
+        {
+            policy.setChecksums( repositoryPolicy.getChecksumPolicy() );
+        }
+        if ( repositoryPolicy.getUpdatePolicy() != null )
+        {
+            policy.setUpdates( repositoryPolicy.getUpdatePolicy() );
+        }
+        return policy;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
     public DependencyCollectorBuilder withRepo(org.oddjob.maven.types.RemoteRepository repo) {
 
         repos.add( ConverterUtils.toRepository(repo) );
@@ -143,12 +138,10 @@ public class DependencyCollectorBuilder {
         }
         repos.addAll(this.repos);
 
-        return new Impl(resolverSession,
-                resolverSession.getRemoteRepoMan().aggregateRepositories(
-                        resolverSession.getSession(),
-                        Collections.emptyList(),
-                        repos,
-                        true));
+        // replaces with mirrors.
+        repos = resolverSession.getSystem().newResolutionRepositories(resolverSession.getSession(), repos);
+
+        return new Impl(resolverSession, repos);
     }
 
     static class Impl implements DependencyCollector {
@@ -174,8 +167,9 @@ public class DependencyCollectorBuilder {
             CollectRequest collectRequest = new CollectRequest();
             collectRequest.setRequestContext("project");
 
+
             for (RemoteRepository repo : repos) {
-                logger.debug("Using remote repository " + repo);
+                logger.debug("Using remote repository {}", repo);
                 collectRequest.addRepository(repo);
             }
 
@@ -202,8 +196,11 @@ public class DependencyCollectorBuilder {
             return Collections.unmodifiableList(repos);
         }
 
-        private void populateCollectRequest(CollectRequest collectRequest, RepositorySystemSession session,
-                                            Dependencies dependencies, List<Exclusion> exclusions) {
+        private void populateCollectRequest(CollectRequest collectRequest,
+                                            RepositorySystemSession session,
+                                            Dependencies dependencies,
+                                            List<Exclusion> exclusions) {
+
             List<Exclusion> globalExclusions = exclusions;
             if (!dependencies.getExclusions().isEmpty()) {
                 globalExclusions = new ArrayList<>(exclusions);
@@ -227,8 +224,8 @@ public class DependencyCollectorBuilder {
                 List<Dependency> deps = readDependencies(dependencies.getFile());
                 for (Dependency dependency : deps) {
                     if (ids.contains(dependency.getVersionlessKey())) {
-                        logger.debug("Ignoring dependency " + dependency.getVersionlessKey() + " from "
-                                + dependencies.getFile() + ", already declared locally");
+                        logger.debug("Ignoring dependency {} from {}, already declared locally",
+                                dependency.getVersionlessKey(), dependencies.getFile());
                         continue;
                     }
                     collectRequest.addDependency(ConverterUtils.toDependency(dependency, globalExclusions, session));

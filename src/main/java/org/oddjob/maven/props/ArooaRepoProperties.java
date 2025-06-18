@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
+/**
+ * Implementation of {@link RepoSessionProperties} that takes the properties from an
+ * Arooa {@link PropertyLookup}.
+ */
 public class ArooaRepoProperties implements RepoSessionProperties {
 
     static final boolean OS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");

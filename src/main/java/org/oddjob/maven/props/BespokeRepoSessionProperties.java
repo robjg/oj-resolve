@@ -4,7 +4,10 @@ package org.oddjob.maven.props;
 import java.util.Properties;
 
 /**
- * Both System and User Properties set by us.
+ * Both System and User Properties set by us. Only used in tests at the moment but would be
+ * required if this library was being used without Oddjob.
+ *
+ * @see ArooaRepoProperties
  */
 public class BespokeRepoSessionProperties implements RepoSessionProperties {
 
