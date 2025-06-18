@@ -191,11 +191,6 @@ public class DependencyCollectorBuilder {
             }
         }
 
-        @Override
-        public List<RemoteRepository> getRemoteRepositories() {
-            return Collections.unmodifiableList(repos);
-        }
-
         private void populateCollectRequest(CollectRequest collectRequest,
                                             RepositorySystemSession session,
                                             Dependencies dependencies,
