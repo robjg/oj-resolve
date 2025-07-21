@@ -49,10 +49,22 @@ public class ResolverSessionType implements ValueFactory<ResolverSession>, Arooa
     private File userSettings;
 
     /**
+     * @oddjob.description Do not use default user settings.
+     * @oddjob.required No. Defaults to false.
+     */
+    private boolean noDefaultUserSettings;
+
+    /**
      * @oddjob.description Specify a global settings file to be used in the session.
      * @oddjob.required No.
      */
     private File globalSettings;
+
+    /**
+     * @oddjob.description Do not use default global settings.
+     * @oddjob.required No. Defaults to false.
+     */
+    private boolean noDefaultGlobalSettings;
 
     /**
      * @oddjob.description Specify a local repository to be used in the session.
@@ -98,6 +110,8 @@ public class ResolverSessionType implements ValueFactory<ResolverSession>, Arooa
             settings = SettingsBuilder.from(sessionProperties)
                     .withUserSettings(userSettings)
                     .withGlobalSettings(globalSettings)
+                    .withNoDefaultUserSettings(noDefaultUserSettings)
+                    .withNoDefaultGlobalSettings(noDefaultGlobalSettings)
                     .build();
 
             return ResolverSessionBuilder.from(sessionProperties)
@@ -141,4 +155,11 @@ public class ResolverSessionType implements ValueFactory<ResolverSession>, Arooa
         new ListSetterHelper<>(this.authentications).set(index, authentication);
     }
 
+    public void setNoDefaultUserSettings(boolean noDefaultUserSettings) {
+        this.noDefaultUserSettings = noDefaultUserSettings;
+    }
+
+    public void setNoDefaultGlobalSettings(boolean noDefaultGlobalSettings) {
+        this.noDefaultGlobalSettings = noDefaultGlobalSettings;
+    }
 }

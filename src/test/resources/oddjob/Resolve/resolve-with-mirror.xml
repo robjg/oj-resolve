@@ -43,7 +43,7 @@
                 <!-- #snippet1 { -->
                 <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
-                        <resolve:session>
+                        <resolve:session noDefaultUserSettings="true" noDefaultGlobalSettings="true">
                             <userSettings>
                                 <file file="${oddjob.dir}/mirror-settings.xml"/>
                             </userSettings>

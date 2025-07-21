@@ -41,7 +41,7 @@
                 <!-- #snippet1 { -->
                 <resolve:resolve id="resolve" noDefaultRepos="true" noSettingsRepos="true" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
-                        <resolve:session>
+                        <resolve:session noDefaultUserSettings="true" noDefaultGlobalSettings="true">
                             <localRepository>
                                 <file file="${local.repo}"/>
                             </localRepository>
