@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
  * @oddjob.example
  *
  * Simple resolve.
- *
  * {@oddjob.xml.resource oddjob/Resolve/resolve-with-defaults.xml}
  */
 public class ResolveJob implements Runnable, ArooaSessionAware {
@@ -73,6 +73,13 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
      * @oddjob.required R/O.
      */
     private volatile List<File> resolvedFiles;
+
+    /**
+     * @oddjob.property
+     * @oddjob.description A List of resolved paths.
+     * @oddjob.required R/O.
+     */
+    private volatile List<Path> resolvedPaths;
 
     /**
      * @oddjob.property
@@ -134,6 +141,10 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
         this.resolvedFiles = results.stream()
                 .map(ar -> ar.getArtifact().getFile())
                 .collect(Collectors.toList());
+
+        this.resolvedPaths = resolvedFiles.stream()
+                .map(File::toPath)
+                .collect(Collectors.toList());
     }
 
     public String getName() {
@@ -172,6 +183,10 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
         return resolvedFiles;
     }
 
+    public List<Path> getResolvedPaths() {
+        return resolvedPaths;
+    }
+
     /**
      * @oddjob.property
      * @oddjob.description An array of resolved files. A convenience to make this
@@ -182,6 +197,18 @@ public class ResolveJob implements Runnable, ArooaSessionAware {
     public File[] getResolvedFilesArray() {
         return Optional.ofNullable(resolvedFiles)
                 .map(rf -> rf.toArray(new File[0]))
+                .orElse(null);
+    }
+
+    /**
+     * @oddjob.property
+     * @oddjob.description An array of resolved paths. A convenience to make this
+     * easier to use.
+     * @oddjob.required R/O.
+     */
+    public Path[] getResolvedPathsArray() {
+        return Optional.ofNullable(resolvedPaths)
+                .map(rf -> rf.toArray(new Path[0]))
                 .orElse(null);
     }
 

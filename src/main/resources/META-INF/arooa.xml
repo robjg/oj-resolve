@@ -23,6 +23,9 @@
 					</formItems>
 				</design:form>
 			</design>
+			<properties>
+				<arooa:property name="arooaSession" type="HIDDEN"/>
+			</properties>
 		</arooa:bean-def>
 	</components>
 	<values>
