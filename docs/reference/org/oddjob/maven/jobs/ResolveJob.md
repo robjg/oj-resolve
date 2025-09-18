@@ -7,7 +7,6 @@ Resolves dependencies to a list of files downloaded to the local repo.
 
 | Property | Description |
 | -------- | ----------- |
-| [arooaSession](#propertyarooaSession) |  | 
 | [dependencies](#propertydependencies) | The dependencies to resolve. | 
 | [name](#propertyname) | The name of this job. | 
 | [noDefaultRepos](#propertynoDefaultRepos) | Use default repos (true/false). | 
@@ -15,6 +14,8 @@ Resolves dependencies to a list of files downloaded to the local repo.
 | [remoteRepositories](#propertyremoteRepositories) | Optional repositories to use. | 
 | [resolvedFiles](#propertyresolvedFiles) | A List of resolved files. | 
 | [resolvedFilesArray](#propertyresolvedFilesArray) | An array of resolved files. | 
+| [resolvedPaths](#propertyresolvedPaths) | A List of resolved paths. | 
+| [resolvedPathsArray](#propertyresolvedPathsArray) | An array of resolved paths. | 
 | [resolverSession](#propertyresolverSession) | The Session to use. | 
 
 
@@ -26,15 +27,6 @@ Resolves dependencies to a list of files downloaded to the local repo.
 
 
 ### Property Detail
-#### arooaSession <a name="propertyarooaSession"></a>
-
-<table style='font-size:smaller'>
-      <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
-      <tr><td><i>Access</i></td><td>WRITE_ONLY</td></tr>
-</table>
-
-
-
 #### dependencies <a name="propertydependencies"></a>
 
 <table style='font-size:smaller'>
@@ -104,6 +96,25 @@ A List of resolved files.
 An array of resolved files. A convenience to make this
 easier to use with an ` org.oddjob.util.URLClassLoaderType`.
 
+#### resolvedPaths <a name="propertyresolvedPaths"></a>
+
+<table style='font-size:smaller'>
+      <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
+      <tr><td><i>Required</i></td><td>R/O.</td></tr>
+</table>
+
+A List of resolved paths.
+
+#### resolvedPathsArray <a name="propertyresolvedPathsArray"></a>
+
+<table style='font-size:smaller'>
+      <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
+      <tr><td><i>Required</i></td><td>R/O.</td></tr>
+</table>
+
+An array of resolved paths. A convenience to make this
+easier to use.
+
 #### resolverSession <a name="propertyresolverSession"></a>
 
 <table style='font-size:smaller'>
@@ -119,7 +130,6 @@ The Session to use. See [resolve:session](../../../../org/oddjob/maven/types/Res
 #### Example 1 <a name="example1"></a>
 
 Simple resolve.
-
 ```xml
 <oddjob id="oddjob">
     <job>

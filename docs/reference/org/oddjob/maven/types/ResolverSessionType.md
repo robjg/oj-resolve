@@ -12,6 +12,8 @@ and other session properties to be overridden.
 | [globalSettings](#propertyglobalSettings) | Specify a global settings file to be used in the session. | 
 | [localRepository](#propertylocalRepository) | Specify a local repository to be used in the session. | 
 | [mirrors](#propertymirrors) | Specify mirrors to be used in the session. | 
+| [noDefaultGlobalSettings](#propertynoDefaultGlobalSettings) | Do not use default global settings. | 
+| [noDefaultUserSettings](#propertynoDefaultUserSettings) | Do not use default user settings. | 
 | [proxies](#propertyproxies) | Specify proxies to be used in the session. | 
 | [userProperties](#propertyuserProperties) | Specify additional user properties to be set. | 
 | [userSettings](#propertyuserSettings) | Specify a user settings file to be used in the session. | 
@@ -67,6 +69,26 @@ Specify a local repository to be used in the session.
 
 Specify mirrors to be used in the session.
 
+#### noDefaultGlobalSettings <a name="propertynoDefaultGlobalSettings"></a>
+
+<table style='font-size:smaller'>
+      <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
+      <tr><td><i>Access</i></td><td>WRITE_ONLY</td></tr>
+      <tr><td><i>Required</i></td><td>No. Defaults to false.</td></tr>
+</table>
+
+Do not use default global settings.
+
+#### noDefaultUserSettings <a name="propertynoDefaultUserSettings"></a>
+
+<table style='font-size:smaller'>
+      <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
+      <tr><td><i>Access</i></td><td>WRITE_ONLY</td></tr>
+      <tr><td><i>Required</i></td><td>No. Defaults to false.</td></tr>
+</table>
+
+Do not use default user settings.
+
 #### proxies <a name="propertyproxies"></a>
 
 <table style='font-size:smaller'>
@@ -105,7 +127,7 @@ Specify a repository.
 ```xml
                 <resolve:resolve id="resolve" noDefaultRepos="true" noSettingsRepos="true" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
-                        <resolve:session>
+                        <resolve:session noDefaultUserSettings="true" noDefaultGlobalSettings="true">
                             <localRepository>
                                 <file file="${local.repo}"/>
                             </localRepository>
@@ -127,7 +149,7 @@ Specify a mirror.
 ```xml
                 <resolve:resolve id="resolve" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
-                        <resolve:session>
+                        <resolve:session noDefaultUserSettings="true" noDefaultGlobalSettings="true">
                             <userSettings>
                                 <file file="${oddjob.dir}/mirror-settings.xml"/>
                             </userSettings>
@@ -146,7 +168,7 @@ Authentication.
 ```xml
                 <resolve:resolve id="resolve" noDefaultRepos="true" noSettingsRepos="true" xmlns:resolve="oddjob:resolve">
                     <resolverSession>
-                        <resolve:session>
+                        <resolve:session noDefaultUserSettings="true" noDefaultGlobalSettings="true">
                             <localRepository>
                                 <file file="${local.repo}"/>
                             </localRepository>
