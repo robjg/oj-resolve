@@ -9,14 +9,14 @@ and other session properties to be overridden.
 | Property | Description |
 | -------- | ----------- |
 | [authentications](#propertyauthentications) | Specify authentications to be used in the session. | 
-| [globalSettings](#propertyglobalSettings) | Specify a global settings file to be used in the session. | 
-| [localRepository](#propertylocalRepository) | Specify a local repository to be used in the session. | 
+| [globalSettings](#propertyglobalsettings) | Specify a global settings file to be used in the session. | 
+| [localRepository](#propertylocalrepository) | Specify a local repository to be used in the session. | 
 | [mirrors](#propertymirrors) | Specify mirrors to be used in the session. | 
-| [noDefaultGlobalSettings](#propertynoDefaultGlobalSettings) | Do not use default global settings. | 
-| [noDefaultUserSettings](#propertynoDefaultUserSettings) | Do not use default user settings. | 
+| [noDefaultGlobalSettings](#propertynodefaultglobalsettings) | Do not use default global settings. | 
+| [noDefaultUserSettings](#propertynodefaultusersettings) | Do not use default user settings. | 
 | [proxies](#propertyproxies) | Specify proxies to be used in the session. | 
-| [userProperties](#propertyuserProperties) | Specify additional user properties to be set. | 
-| [userSettings](#propertyuserSettings) | Specify a user settings file to be used in the session. | 
+| [userProperties](#propertyuserproperties) | Specify additional user properties to be set. | 
+| [userSettings](#propertyusersettings) | Specify a user settings file to be used in the session. | 
 
 
 ### Example Summary
@@ -39,7 +39,7 @@ and other session properties to be overridden.
 
 Specify authentications to be used in the session.
 
-#### globalSettings <a name="propertyglobalSettings"></a>
+#### globalSettings <a name="propertyglobalsettings"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -49,7 +49,7 @@ Specify authentications to be used in the session.
 
 Specify a global settings file to be used in the session.
 
-#### localRepository <a name="propertylocalRepository"></a>
+#### localRepository <a name="propertylocalrepository"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -69,7 +69,7 @@ Specify a local repository to be used in the session.
 
 Specify mirrors to be used in the session.
 
-#### noDefaultGlobalSettings <a name="propertynoDefaultGlobalSettings"></a>
+#### noDefaultGlobalSettings <a name="propertynodefaultglobalsettings"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -79,7 +79,7 @@ Specify mirrors to be used in the session.
 
 Do not use default global settings.
 
-#### noDefaultUserSettings <a name="propertynoDefaultUserSettings"></a>
+#### noDefaultUserSettings <a name="propertynodefaultusersettings"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -99,7 +99,7 @@ Do not use default user settings.
 
 Specify proxies to be used in the session.
 
-#### userProperties <a name="propertyuserProperties"></a>
+#### userProperties <a name="propertyuserproperties"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -109,7 +109,7 @@ Specify proxies to be used in the session.
 
 Specify additional user properties to be set.
 
-#### userSettings <a name="propertyuserSettings"></a>
+#### userSettings <a name="propertyusersettings"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>

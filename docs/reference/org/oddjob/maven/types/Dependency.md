@@ -9,20 +9,20 @@ for examples.
 
 | Property | Description |
 | -------- | ----------- |
-| [artifactId](#propertyartifactId) | The artifact name. | 
+| [artifactId](#propertyartifactid) | The artifact name. | 
 | [classifier](#propertyclassifier) | The classifier of the artifact. | 
 | [coords](#propertycoords) | The full Coordinates of the artifact. | 
 | [exclusions](#propertyexclusions) | Exclusion from transitive dependencies. | 
-| [groupId](#propertygroupId) | The group id of the artifact. | 
+| [groupId](#propertygroupid) | The group id of the artifact. | 
 | [scope](#propertyscope) | The scope of the artifact. | 
-| [systemPath](#propertysystemPath) | Specify an absolute path of the artifact. | 
+| [systemPath](#propertysystempath) | Specify an absolute path of the artifact. | 
 | [type](#propertytype) | The type of the artifact. | 
 | [version](#propertyversion) | The version of the artifact. | 
-| [versionlessKey](#propertyversionlessKey) |  | 
+| [versionlessKey](#propertyversionlesskey) |  | 
 
 
 ### Property Detail
-#### artifactId <a name="propertyartifactId"></a>
+#### artifactId <a name="propertyartifactid"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -59,7 +59,7 @@ of `<groupId>:<artifactId>:<version>[[:<type>[:<classifier>]]:<scope>].`
 
 Exclusion from transitive dependencies.
 
-#### groupId <a name="propertygroupId"></a>
+#### groupId <a name="propertygroupid"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -77,7 +77,7 @@ The group id of the artifact.
 
 The scope of the artifact.
 
-#### systemPath <a name="propertysystemPath"></a>
+#### systemPath <a name="propertysystempath"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -104,7 +104,7 @@ The type of the artifact.
 
 The version of the artifact.
 
-#### versionlessKey <a name="propertyversionlessKey"></a>
+#### versionlessKey <a name="propertyversionlesskey"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>

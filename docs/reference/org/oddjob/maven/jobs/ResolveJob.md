@@ -9,14 +9,14 @@ Resolves dependencies to a list of files downloaded to the local repo.
 | -------- | ----------- |
 | [dependencies](#propertydependencies) | The dependencies to resolve. | 
 | [name](#propertyname) | The name of this job. | 
-| [noDefaultRepos](#propertynoDefaultRepos) | Use default repos (true/false). | 
-| [noSettingsRepos](#propertynoSettingsRepos) | Use repos from the settings (true/false). | 
-| [remoteRepositories](#propertyremoteRepositories) | Optional repositories to use. | 
-| [resolvedFiles](#propertyresolvedFiles) | A List of resolved files. | 
-| [resolvedFilesArray](#propertyresolvedFilesArray) | An array of resolved files. | 
-| [resolvedPaths](#propertyresolvedPaths) | A List of resolved paths. | 
-| [resolvedPathsArray](#propertyresolvedPathsArray) | An array of resolved paths. | 
-| [resolverSession](#propertyresolverSession) | The Session to use. | 
+| [noDefaultRepos](#propertynodefaultrepos) | Use default repos (true/false). | 
+| [noSettingsRepos](#propertynosettingsrepos) | Use repos from the settings (true/false). | 
+| [remoteRepositories](#propertyremoterepositories) | Optional repositories to use. | 
+| [resolvedFiles](#propertyresolvedfiles) | A List of resolved files. | 
+| [resolvedFilesArray](#propertyresolvedfilesarray) | An array of resolved files. | 
+| [resolvedPaths](#propertyresolvedpaths) | A List of resolved paths. | 
+| [resolvedPathsArray](#propertyresolvedpathsarray) | An array of resolved paths. | 
+| [resolverSession](#propertyresolversession) | The Session to use. | 
 
 
 ### Example Summary
@@ -47,7 +47,7 @@ The dependencies to resolve. See `org.oddjob.maven.types.DependencyContainer`.
 
 The name of this job.
 
-#### noDefaultRepos <a name="propertynoDefaultRepos"></a>
+#### noDefaultRepos <a name="propertynodefaultrepos"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -57,7 +57,7 @@ The name of this job.
 
 Use default repos (true/false).
 
-#### noSettingsRepos <a name="propertynoSettingsRepos"></a>
+#### noSettingsRepos <a name="propertynosettingsrepos"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ATTRIBUTE</td></tr>
@@ -67,7 +67,7 @@ Use default repos (true/false).
 
 Use repos from the settings (true/false).
 
-#### remoteRepositories <a name="propertyremoteRepositories"></a>
+#### remoteRepositories <a name="propertyremoterepositories"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
@@ -77,7 +77,7 @@ Use repos from the settings (true/false).
 
 Optional repositories to use.
 
-#### resolvedFiles <a name="propertyresolvedFiles"></a>
+#### resolvedFiles <a name="propertyresolvedfiles"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
@@ -86,7 +86,7 @@ Optional repositories to use.
 
 A List of resolved files.
 
-#### resolvedFilesArray <a name="propertyresolvedFilesArray"></a>
+#### resolvedFilesArray <a name="propertyresolvedfilesarray"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
@@ -96,7 +96,7 @@ A List of resolved files.
 An array of resolved files. A convenience to make this
 easier to use with an ` org.oddjob.util.URLClassLoaderType`.
 
-#### resolvedPaths <a name="propertyresolvedPaths"></a>
+#### resolvedPaths <a name="propertyresolvedpaths"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
@@ -105,7 +105,7 @@ easier to use with an ` org.oddjob.util.URLClassLoaderType`.
 
 A List of resolved paths.
 
-#### resolvedPathsArray <a name="propertyresolvedPathsArray"></a>
+#### resolvedPathsArray <a name="propertyresolvedpathsarray"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Access</i></td><td>READ_ONLY</td></tr>
@@ -115,7 +115,7 @@ A List of resolved paths.
 An array of resolved paths. A convenience to make this
 easier to use.
 
-#### resolverSession <a name="propertyresolverSession"></a>
+#### resolverSession <a name="propertyresolversession"></a>
 
 <table style='font-size:smaller'>
       <tr><td><i>Configured By</i></td><td>ELEMENT</td></tr>
