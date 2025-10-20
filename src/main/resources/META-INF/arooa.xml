@@ -37,6 +37,41 @@
 		</arooa:bean-def>
 		<arooa:bean-def element='session'
 						className='org.oddjob.maven.types.ResolverSessionType'>
+            <design>
+                <design:form xmlns:design="arooa:design">
+                <formItems>
+                    <design:tabs>
+                        <formItems>
+                            <design:group title="General">
+                                <formItems>
+                                    <design:single property="localRepository" title="Local Repository"/>
+                                    <design:single property="userProperties" title="User Properties"/>
+                                    <design:single property="userSettings" title="User Settings"/>
+                                    <design:text property="noDefaultUserSettings" title="No Default User Settings"/>
+                                    <design:single property="globalSettings" title="Global Settings File"/>
+                                    <design:text property="noDefaultGlobalSettings" title="No Default Global Settings"/>
+                                </formItems>
+                            </design:group>
+                            <design:group title="Mirrors">
+                                <formItems>
+                                    <design:indexed property="mirrors" title="Mirrors"/>
+                                </formItems>
+                            </design:group>
+                            <design:group title="Proxies">
+                                <formItems>
+                                    <design:indexed property="proxies" title="Proxies"/>
+                                </formItems>
+                            </design:group>
+                            <design:group title="Authentications">
+                                <formItems>
+                                    <design:indexed property="authentications" title="Authentications"/>
+                                </formItems>
+                            </design:group>
+                        </formItems>
+                    </design:tabs>
+                </formItems>
+                </design:form>
+            </design>
 		</arooa:bean-def>
 	</values>
 </arooa:descriptor>
