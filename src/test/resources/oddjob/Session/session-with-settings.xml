@@ -2,7 +2,7 @@
     <job>
         <bean class="org.oddjob.maven.types.ResolverSessionTypeTest$SessionCapture" id="sessionCapture">
             <resolverSession>
-                <resolve:session xmlns:resolve="oddjob:resolve">
+                <resolve:session xmlns:resolve="oddjob:resolve" noDefaultGlobalSettings="true">
                     <userProperties>
                         <properties>
                             <values>

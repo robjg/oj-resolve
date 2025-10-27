@@ -127,11 +127,16 @@ public class SettingsBuilder {
     }
 
     public static String settingsToString(Settings settings) {
-        return "Settings:{ localRep: " + settings.getLocalRepository() +
-                ", mirrors " + settings.getMirrors().size() +
-                ", proxies " + settings.getProxies().size() +
-                ", servers " + settings.getServers().size() +
-                " }";
+        if (settings == null) {
+            return "null";
+        }
+        else {
+            return "Settings:{ localRep: " + settings.getLocalRepository() +
+                    ", mirrors " + settings.getMirrors().size() +
+                    ", proxies " + settings.getProxies().size() +
+                    ", servers " + settings.getServers().size() +
+                    " }";
+        }
     }
 
 }

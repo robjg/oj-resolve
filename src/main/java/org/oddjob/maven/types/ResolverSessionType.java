@@ -13,6 +13,8 @@ import org.oddjob.maven.props.RepoSessionProperties;
 import org.oddjob.maven.session.ResolverSession;
 import org.oddjob.maven.session.ResolverSessionBuilder;
 import org.oddjob.maven.settings.SettingsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ import java.util.Properties;
  *
  */
 public class ResolverSessionType implements ValueFactory<ResolverSession>, ArooaSessionAware {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResolverSessionType.class);
 
     /**
      * @oddjob.description Specify additional user properties to be set.
@@ -114,13 +118,20 @@ public class ResolverSessionType implements ValueFactory<ResolverSession>, Arooa
                     .withNoDefaultGlobalSettings(noDefaultGlobalSettings)
                     .build();
 
-            return ResolverSessionBuilder.from(sessionProperties)
+            logger.debug("Built: {}", SettingsBuilder.settingsToString(settings));
+
+            ResolverSession resolverSession =
+                    ResolverSessionBuilder.from(sessionProperties)
                     .withSettings(settings)
                     .withLocalRepo(localRepository)
                     .withMirrors(mirrors)
                     .withProxies(proxies)
                     .withAuthentications(authentications)
                     .build();
+
+            logger.debug("Created: {}", resolverSession);
+
+            return resolverSession;
 
         } catch (SettingsBuildingException e) {
             throw new ArooaConversionException(e);

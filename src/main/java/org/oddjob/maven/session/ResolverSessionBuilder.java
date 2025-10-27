@@ -1,7 +1,5 @@
 package org.oddjob.maven.session;
 
-import org.apache.maven.model.building.DefaultModelBuilderFactory;
-import org.apache.maven.model.building.ModelBuilder;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
@@ -21,14 +19,22 @@ import org.oddjob.maven.types.Authentication;
 import org.oddjob.maven.types.Mirror;
 import org.oddjob.maven.types.Proxy;
 import org.oddjob.maven.util.ConverterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Builds an {@link ResolverSession} which is everything the {@link org.oddjob.maven.jobs.ResolveJob}
+ * needs to resolve a dependency. Most of this code was copied from {@code AntRepoSys}.
+ */
 public class ResolverSessionBuilder {
 
-    private static final ModelBuilder MODEL_BUILDER = new DefaultModelBuilderFactory().newInstance();
+    private static final Logger logger = LoggerFactory.getLogger(ResolverSessionBuilder.class);
+
+    public static String LOCAL_REPO_PROPERTY = "maven.repo.local";
 
     private final RepoSessionProperties sessionProperties;
 
@@ -83,6 +89,20 @@ public class ResolverSessionBuilder {
     }
 
     public ResolverSession build() throws SettingsBuildingException {
+
+        logger.atDebug()
+                .setMessage("Creating ResolveSession with sessionProperties {}, settings {}, " +
+                            "localRepo {}, mirrors {}, proxies {}, authentications {}, offline {}")
+                .addArgument(
+                    sessionProperties)
+                .addArgument(() -> SettingsBuilder.settingsToString(settings))
+                        .addArgument(localRepo)
+                .addArgument(mirrors)
+                .addArgument(proxies)
+                .addArgument(authentications)
+                .addArgument(offline)
+                .log();
+
 
         Settings settings = Optional.ofNullable(this.settings)
                 .orElseGet(() -> {
@@ -170,17 +190,14 @@ public class ResolverSessionBuilder {
     }
 
     private String getUserAgent(RepoSessionProperties project) {
-        StringBuilder buffer = new StringBuilder(128);
 
-        buffer.append("Apache-Ant/").append(project.getProperty("ant.version"));
-        buffer.append(" (");
-        buffer.append("Java ").append(System.getProperty("java.version"));
-        buffer.append("; ");
-        buffer.append(System.getProperty("os.name")).append(" ").append(System.getProperty("os.version"));
-        buffer.append(")");
-        buffer.append(" Aether");
-
-        return buffer.toString();
+        return "Apache-Ant/" + project.getProperty("ant.version") +
+                " (" +
+                "Java " + System.getProperty("java.version") +
+                "; " +
+                System.getProperty("os.name") + " " + System.getProperty("os.version") +
+                ")" +
+                " Aether";
     }
 
     boolean isOffline(Settings settings) {
@@ -269,17 +286,22 @@ public class ResolverSessionBuilder {
     }
 
     static File getDefaultLocalRepoDir(RepoSessionProperties project, Settings settings) {
-        String dir = project.getProperty("maven.repo.local");
+        String dir = project.getProperty(LOCAL_REPO_PROPERTY);
 
         if (dir != null) {
+            logger.debug("Setting local repo from user property 'maven.repo.local'={}", dir);
             return new File(dir);
         }
 
-        if (settings.getLocalRepository() != null) {
+        dir = settings.getLocalRepository();
+        if (dir != null) {
+            logger.debug("Setting local repo from settings, {}", dir);
             return new File(settings.getLocalRepository());
         }
 
-        return new File(new File(project.getProperty("user.home"), ".m2"), "repository");
+        File localRepo = new File(new File(project.getProperty("user.home"), ".m2"), "repository");
+        logger.debug("Setting local repo to default of {}", localRepo);
+        return localRepo;
     }
 
     static class Impl implements ResolverSession {
@@ -317,10 +339,42 @@ public class ResolverSessionBuilder {
         public String toString() {
             return "ResolverSession{" +
                     "settings=" + SettingsBuilder.settingsToString(settings) +
-                    ", session=" + session +
+                    ", session=" + ResolverSessionBuilder.toString(session) +
                     ", repoSys=" + repoSys +
                     '}';
         }
     }
 
+    public static String toString(RepositorySystemSession repositorySystemSession) {
+
+        return "RepositorySystemSession={localRepository=" + repositorySystemSession.getLocalRepository() +
+            ", localRepositoryManager=" + repositorySystemSession.getLocalRepositoryManager() +
+            ", isOffline=" + repositorySystemSession.isOffline() +
+                ", ignoreArtifactDescriptorRepositories=" + repositorySystemSession.isIgnoreArtifactDescriptorRepositories() +
+                ", resolutionErrorPolicy=" + repositorySystemSession.getResolutionErrorPolicy() +
+                ", artifactDescriptorPolicy=" + repositorySystemSession.getArtifactDescriptorPolicy() +
+                ", checksumPolicy=" + repositorySystemSession.getChecksumPolicy() +
+                ", updatePolicy=" + repositorySystemSession.getUpdatePolicy() +
+                ", workspaceReader=" + repositorySystemSession.getWorkspaceReader() +
+                ", repositoryListener=" + repositorySystemSession.getRepositoryListener() +
+                ", transferListener=" + repositorySystemSession.getTransferListener() +
+                ", systemProperties count=" + Optional.ofNullable(
+                        repositorySystemSession.getSystemProperties()).map(Map::size).orElse(0) +
+                ", userProperties count=" + Optional.ofNullable(
+                        repositorySystemSession.getUserProperties()).map(Map::size).orElse(0) +
+                ", configProperties count=" + Optional.ofNullable(
+                        repositorySystemSession.getConfigProperties()).map(Map::size).orElse(0) +
+                ", mirrorSelector=" + repositorySystemSession.getMirrorSelector() +
+                ", proxySelector=" + repositorySystemSession.getProxySelector() +
+                ", authenticationSelector=" + repositorySystemSession.getAuthenticationSelector() +
+                ", artifactTypeRegistry=" + repositorySystemSession.getArtifactTypeRegistry() +
+                ", dependencyTraverser=" + repositorySystemSession.getDependencyTraverser() +
+                ", dependencyManager=" + repositorySystemSession.getDependencyManager() +
+                ", dependencySelector=" + repositorySystemSession.getDependencySelector() +
+                ", versionFilter=" + repositorySystemSession.getVersionFilter() +
+                ", dependencyGraphTransformer=" + repositorySystemSession.getDependencyGraphTransformer() +
+                ", data=" + repositorySystemSession.getData() +
+                ", cache=" + repositorySystemSession.getCache() + "}";
+
+    }
 }

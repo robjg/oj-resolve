@@ -66,8 +66,8 @@ public class ArooaRepoProperties implements RepoSessionProperties {
 
     @Override
     public String toString() {
-        return "ResolverSessionProperties: session " + sessionProperties.size() +
-                ", user " + userProperties.size();
+        return "ResolverSessionProperties: session count " + sessionProperties.size() +
+                ", user count " + userProperties.size();
     }
 
     static Properties getEnvProperties() {

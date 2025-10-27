@@ -3,21 +3,25 @@ package org.oddjob.maven.types;
 import org.eclipse.aether.repository.Proxy;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.oddjob.Oddjob;
 import org.oddjob.OddjobLookup;
 import org.oddjob.arooa.convert.ArooaConversionException;
 import org.oddjob.maven.session.ResolverSession;
+import org.oddjob.maven.session.ResolverSessionBuilder;
 import org.oddjob.state.ParentState;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 
-public class ResolverSessionTypeTest {
+class ResolverSessionTypeTest {
 
     public static class SessionCapture implements Runnable {
 
@@ -35,15 +39,39 @@ public class ResolverSessionTypeTest {
         public void run() {
 
         }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName();
+        }
+    }
+
+    static Object localRepo;
+
+
+    @BeforeAll
+    static void setUpAll() {
+        // Intellij sets this property which causes tests where
+        // we change the repo to fail.
+        localRepo = System.getProperties()
+                .remove(ResolverSessionBuilder.LOCAL_REPO_PROPERTY);
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        if (localRepo != null) {
+            System.getProperties()
+                    .put(ResolverSessionBuilder.LOCAL_REPO_PROPERTY, localRepo);
+        }
     }
 
     @Test
-    public void testSessionWithOurConfiguration() throws ArooaConversionException {
+    void testSessionWithOurConfiguration() throws ArooaConversionException {
 
         Oddjob oddjob = new Oddjob();
 
-        File configFile = new File(getClass().getResource(
-                "/oddjob/Session/session-with-config.xml").getFile());
+        File configFile = new File(Objects.requireNonNull(getClass().getResource(
+                "/oddjob/Session/session-with-config.xml")).getFile());
 
         oddjob.setFile(configFile);
         oddjob.run();
@@ -61,7 +89,7 @@ public class ResolverSessionTypeTest {
 
         RemoteRepository mirrorRepository = new RemoteRepository.Builder("planetmirror.com", "default",
                 "http://downloads.planetmirror.com/pub/maven2")
-                .setMirroredRepositories(Arrays.asList(remoteRepository))
+                .setMirroredRepositories(Collections.singletonList(remoteRepository))
                 .build();
 
         assertThat(resolverSession.getSession().getMirrorSelector().getMirror(remoteRepository),
@@ -77,12 +105,12 @@ public class ResolverSessionTypeTest {
     }
 
     @Test
-    public void testSessionWithSettings() throws ArooaConversionException {
+    void testSessionWithSettings() throws ArooaConversionException {
 
         Oddjob oddjob = new Oddjob();
 
-        File configFile = new File(getClass().getResource(
-                "/oddjob/Session/session-with-settings.xml").getFile());
+        File configFile = new File(Objects.requireNonNull(getClass().getResource(
+                "/oddjob/Session/session-with-settings.xml")).getFile());
 
         oddjob.setFile(configFile);
         oddjob.run();
@@ -100,7 +128,7 @@ public class ResolverSessionTypeTest {
 
         RemoteRepository mirrorRepository = new RemoteRepository.Builder("planetmirror.com", "default",
                 "http://downloads.planetmirror.com/pub/maven2")
-                .setMirroredRepositories(Arrays.asList(remoteRepository))
+                .setMirroredRepositories(Collections.singletonList(remoteRepository))
                 .build();
 
         assertThat(resolverSession.getSession().getMirrorSelector().getMirror(remoteRepository),
